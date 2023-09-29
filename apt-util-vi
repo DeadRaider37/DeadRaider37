@@ -1,0 +1,105 @@
+#!/bin/bash
+clear
+#COLOR VARS
+RED="\e[38;5;9m"
+GREEN="\e[38;5;118m"
+AQUA="\e[38;5;51m"
+DAQUA="\e[38;5;6m"
+BLUE="\e[38;5;21m"
+DBLUE="\e[38;5;4m"
+RC="\e[0m"
+LGREEN="\e[38;5;48m"
+DATE=`date +%y%m%d%H%M%S`
+
+echo -e "
+ $AQUA█████$DAQUA╗ $AQUA██████$DAQUA╗ $AQUA████████$DAQUA╗    $AQUA██$DAQUA╗   $AQUA██$DAQUA╗$AQUA████████$DAQUA╗$AQUA██$DAQUA╗$AQUA██$DAQUA╗$RC     
+$AQUA██$DAQUA╔══$AQUA██$DAQUA╗$AQUA██$DAQUA╔══$AQUA██$DAQUA╗╚══$AQUA██$DAQUA╔══╝    $AQUA██$DAQUA║   $AQUA██$DAQUA║╚══$AQUA██$DAQUA╔══╝$AQUA██$DAQUA║$AQUA██$DAQUA║$RC     
+$AQUA███████$DAQUA║$AQUA██████$DAQUA╔╝   $AQUA██$DAQUA║       $AQUA██$DAQUA║   $AQUA██$DAQUA║   $AQUA██$DAQUA║   $AQUA██$DAQUA║$AQUA██$DAQUA║$RC     
+$AQUA██$DAQUA╔══$AQUA██$DAQUA║$AQUA██$DAQUA╔═══╝    $AQUA██$DAQUA║       $AQUA██$DAQUA║   $AQUA██$DAQUA║   $AQUA██$DAQUA║   $AQUA██$DAQUA║$AQUA██$DAQUA║$RC     
+$AQUA██$DAQUA║  $AQUA██$DAQUA║$AQUA██$DAQUA║        $AQUA██$DAQUA║       $DAQUA╚$AQUA██████$dAQUA╔╝   $AQUA██$DAQUA║   $AQUA██$DAQUA║$AQUA███████$DAQUA╗
+╚═╝  ╚═╝╚═╝        ╚═╝        ╚═════╝    ╚═╝   ╚═╝╚══════╝                                      
+$BLUEmade by some idiot mid class
+"
+echo -e ""
+echo -e ""
+echo -e "$LGREEN   ACTIONS:"
+echo -e "$GREEN Download a package : 1"
+echo -e "$GREEN Setup sources.list : 2 $RED (ROOT REQUIRED)"
+echo -e "$GREEN Install a folder   : 3 $RED (ROOT REQUIRED)"
+echo -e "$GREEN Cancel             : Anything Else"
+echo -e ""
+
+echo -n -e "$DAQUA Enter a number (1-?): $RC"
+read ACT
+
+if [ "$ACT" -eq "1" ]; 
+  then
+  echo "Selected Download"
+  echo -e -n "Enter package(s) name(s): "
+  read PKG
+  apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances $PKG | grep "^\w" | sort -u)
+
+elif [ "$ACT" -eq "2" ]; 
+  then
+  echo -e "Selected Sources.List"
+  echo -e "$RED WARNING: THIS WILL ERASE YOUR CURRENT SOURCES.LIST, CTRL + C TO CANCEL, THIS IS YOUR LAST WARNING$RC"
+  echo -n -e "Enter Debian Codename: "
+  read DEB
+  echo -e -n "Selected $DEB, retype to confirm: "
+  read DEB
+  echo -e "Selected $DEB,backuping current sources.list"
+  mv /etc/apt/sources.list /etc/apt/sources.$DATE.list
+  echo -e "Old list copied, building new list"
+  echo "
+#BUILT FROM APT UTIL ON $DATE
+
+deb http://deb.debian.org/debian $DEB main contrib non-free
+deb-src http://deb.debian.org/debian $DEB main contrib non-free 
+
+deb http://deb.debian.org/debian-security $DEB-security main contrib non-free 
+deb-src http://deb.debian.org/debian-security $DEB-security main contrib non-free 
+
+deb http://deb.debian.org/debian $DEB-updates main contrib non-free 
+deb-src http://deb.debian.org/debian $DEB-updates main contrib non-free 
+  " >| /etc/apt/sources.list
+  apt update
+  echo -e "$GREEN FINISHED $RC"
+
+elif [ "$ACT" -eq "3" ]; 
+  then
+  echo -e "do it yourself dumbass"
+  
+elif [ "$ACT" -eq "69" ]; 
+  then
+  echo -e "nice"
+
+elif [ "$ACT" -eq "10" ]; 
+  then
+  echo -e "The variable is equal to 10 dumbass"
+else
+  echo -e "Canceling..."
+fi
+
+
+# old file lol
+#
+#---External Machine (Debian 10.4)---
+#
+# $ apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances (PACKAGE) | grep "^\w" | sort -u)
+#
+#---On Chromebook ---
+#
+#sudo nano /etc/apt/sources.list
+#
+#replace with:
+#----SOURCES.LIST----
+#deb http://deb.debian.org/debian/ buster main
+#deb-src http://deb.debian.org/debian/ buster main
+#
+#deb http://deb.debian.org/debian/ buster-updates main
+#deb-src http://deb.debian.org/debian/ buster-updates main
+#
+#deb http://security.debian.org/debian-security buster/updates main
+#deb-src http://security.debian.org/debian-security buster/updates main
+#----END SOURCES.LIST----
+#
