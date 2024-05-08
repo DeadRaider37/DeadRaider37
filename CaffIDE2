@@ -87,7 +87,7 @@ function listfile () {
   read JUNKIERHAHASOFUNNY
 }
 function reloadcaffide () {
-  bash $PWD/CaffIDE
+  bash $PWD/CaffIDE2
   exit
 }
 function compiler () {
@@ -109,7 +109,7 @@ case $CHOICE in
   3) runfile ;;
   4) compiler ;;
   5) listfile ;;
-  8) $texteditor $PWD/CaffIDE ;;
+  8) $texteditor $PWD/CaffIDE2 ;;
   9) reloadcaffide ;;
   0) exit && clear && echo -e "$TEXTLABEL Thank you and goodbye!" ;;
 esac
